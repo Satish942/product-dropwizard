@@ -1,6 +1,7 @@
 package com.sapient.product;
 
 
+import com.example.providers.RuntimeExceptionMapper;
 import com.sapient.product.config.MessagesConfiguration;
 import com.sapient.product.resource.ProductResource;
 import com.yammer.dropwizard.Service;
@@ -23,7 +24,7 @@ public class ProductService extends Service<MessagesConfiguration> {
     public void run(final MessagesConfiguration conf, final Environment env) throws Exception {
     	CouchbaseService service = new CouchbaseService(conf);
         env.addResource(new ProductResource(service));
-        
+        env.addProvider(new RuntimeExceptionMapper());
     }
 
 }

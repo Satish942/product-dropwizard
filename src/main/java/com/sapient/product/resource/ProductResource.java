@@ -25,7 +25,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
@@ -41,6 +45,7 @@ import com.couchbase.client.java.view.ViewQuery;
 import com.couchbase.client.java.view.ViewResult;
 import com.couchbase.client.java.view.ViewRow;
 import com.sapient.product.CouchbaseService;
+import com.yammer.metrics.annotation.Timed;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +84,7 @@ public class ProductResource {
     
     @GET
     @Produces(value= MediaType.APPLICATION_JSON_VALUE)
+    @Timed
     public ResponseEntity<String> listProducts() {
         ViewResult result = couchbaseService.findAllBeers(1, 100);
         if (!result.success()) {
@@ -97,8 +103,10 @@ public class ProductResource {
             return new ResponseEntity<String>(keys.toString(), HttpStatus.OK);
         }
     }
-
-    /*@RequestMapping(method = RequestMethod.POST, value = "/product/create")
+    @POST
+    @Produces(value= MediaType.APPLICATION_JSON_VALUE)
+    @Path(value = "/create")
+    @Timed
     public ResponseEntity<String> createProduct1() {
     	LOGGER.info("createProduct1");
     	Map<String, Object> beerData = new HashMap<String, Object>();
@@ -119,8 +127,10 @@ public class ProductResource {
         }
     }
     
-    
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,value = "/product")
+    @POST
+    @Produces(value= MediaType.APPLICATION_JSON_VALUE)
+    @Path(value = "/create1")
+    @Timed
     public ResponseEntity<String> createProduct(@RequestBody Map<String, Object> beerData) {
     	LOGGER.debug("createProduct");
     	LOGGER.info("createProduct");
@@ -139,14 +149,19 @@ public class ProductResource {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/product/{productId}")
+    
+    @DELETE
+    @Produces(value= MediaType.APPLICATION_JSON_VALUE)
+    @Path(value = "/{productId}")
+    @Timed
     public ResponseEntity<String> deleteProduct(@PathVariable String beerId) {
         JsonDocument deleted = couchbaseService.delete(beerId);
         return new ResponseEntity<String>(""+deleted.cas(), HttpStatus.OK);
     }
-
-    @RequestMapping(value = "/product/{productId}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
+    
+    /*@PUT
+    @Consumes(value= MediaType.APPLICATION_JSON_VALUE)
+    @Path(value = "/{productId}")
     public ResponseEntity<String> updateProduct(@PathVariable String beerId, @RequestBody Map<String, Object> beerData) {
         try {
             JsonObject beer = parseProducts(beerData);
@@ -159,7 +174,7 @@ public class ProductResource {
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 
     private JsonObject parseProducts(Map<String, Object> beerData) {
         String type = (String) beerData.get("type");
@@ -175,9 +190,10 @@ public class ProductResource {
         }
     }
 
-   
-
-    @RequestMapping(method = RequestMethod.GET, value = "/product/search/{token}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GET
+    @Produces(value= MediaType.APPLICATION_JSON_VALUE)
+    @Path(value = "/search/{token}")
+    @Timed
     public ResponseEntity<String> searchProduct(@PathVariable final String token) {
         //we'll get all beers asynchronously and compose on the stream to extract those that match
         AsyncViewResult viewResult = couchbaseService.findAllBeersAsync().toBlocking().single();
@@ -204,5 +220,5 @@ public class ProductResource {
             return new ResponseEntity<String>("Error while searching - " + viewResult.error(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }*/
+    }
 }

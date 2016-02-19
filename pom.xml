@@ -21,7 +21,13 @@
 			<artifactId>dropwizard-core</artifactId>
 			<version>0.6.2</version>
 		</dependency>
-		
+		<!--  Yammer Pom entry -->
+		<dependency>
+			<groupId>com.yammer.dropwizard</groupId>
+			<artifactId>dropwizard-views</artifactId>
+			<version>0.6.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -65,28 +71,28 @@
 								</transformer>
 							</transformers>
 
-	<filters>
-		<filter>
-			<artifact>spark-streaming-twitter_2.10:spark-streaming-twitter_2.10</artifact>
-			<includes>
-				<include>**</include>
-			</includes>
-		</filter>
-		<filter>
-			<artifact>twitter4j-stream:twitter4j-stream</artifact>
-			<includes>
-				<include>**</include>
-			</includes>
-		</filter>
-		<filter>
-			<artifact>*:*</artifact>
-			<excludes>
-				<exclude>META-INF/*.SF</exclude>
-				<exclude>META-INF/*.DSA</exclude>
-				<exclude>META-INF/*.RSA</exclude>
-			</excludes>
-		</filter>
-	</filters>
+							<filters>
+								<filter>
+									<artifact>spark-streaming-twitter_2.10:spark-streaming-twitter_2.10</artifact>
+									<includes>
+										<include>**</include>
+									</includes>
+								</filter>
+								<filter>
+									<artifact>twitter4j-stream:twitter4j-stream</artifact>
+									<includes>
+										<include>**</include>
+									</includes>
+								</filter>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
 						</configuration>
 					</execution>
 				</executions>

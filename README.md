@@ -14,6 +14,6 @@ Quick start
 -----------
 1. mvn package
 
-2. -X compile exec:java
+2  -X compile exec:java
 
 3. Point your browser to [http://localhost:8080/product](http://localhost:8080/product)
